@@ -129,9 +129,9 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
 });
 
 export const logOut = asyncHandler(async (req, res) => {
+  localStorage.clear();
   const User = await userModel.findByIdAndUpdate(req.user._id, {
     userStatus: "offline",
   });
-  localStorage.removeItem("token");
   return res.status(200).json({ message: "Done" });
 });
