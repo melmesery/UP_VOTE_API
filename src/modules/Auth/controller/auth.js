@@ -132,5 +132,6 @@ export const logOut = asyncHandler(async (req, res) => {
   const User = await userModel.findByIdAndUpdate(req.user._id, {
     userStatus: "offline",
   });
+  localStorage.removeItem("token");
   return res.status(200).json({ message: "Done" });
 });

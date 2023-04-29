@@ -15,7 +15,22 @@ const initApp = (app, express) => {
   app.use(express.json({}));
   app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
 
-  app.use(cors());
+  var whitelist = [
+    "http://localhost:5173",
+    "https://melmesery.github.io/MERN_UP_VOTE/",
+  ]; 
+
+  app.use(async (req, res, next) => {
+    if (!whitelist.includes(req.header("origin"))) {
+      return next(new Error("Not Allowed By CORS", { cause: 403 }));
+    }
+    await res.header("Access-Control-Allow-Origin", "*");
+    await res.header("Access-Control-Allow-Headers", "*");
+    await res.header("Access-Control-Allow-Private-Network", "true");
+    await res.header("Access-Control-Allow-Methods", "*");
+    next();
+  });
+
   app.use(bodyParser.json());
 
   app.get("/", (req, res) => res.send("Hello World!"));
